@@ -1,37 +1,20 @@
-# Hoffman Method for Assembly Line Balancing
+# Hoffman Method - Line Balancing
 
-A Python tool built with Streamlit to solve assembly line balancing problems using the Hoffman heuristic. This was developed as a project for my Computer Integrated Manufacturing (CIM) class.
+This is a Python script I wrote for my Computer Integrated Manufacturing (CIM) class. It solves assembly line balancing problems using the Hoffman heuristic method and visualizes the process using Streamlit.
 
-## Features
+**Live Demo:** [Link](https://hoffman-method-8nkmvbajvdlkk3gwndfca9.streamlit.app/)
 
-**Live Demo:** [Try the application here](https://hoffman-method-8nkmvbajvdlkk3gwndfca9.streamlit.app/)
-
-- Takes task times, precedence constraints, and cycle time as inputs.
-- Automatically generates the precedence matrix (including transitive closures).
-- Solves the line balancing problem step by step.
-- Displays the precedence diagram using NetworkX.
-- Exports the final station assignments to a CSV file.
-
-## Installation and Usage
-
-1. Clone the repository:
-```bash
-git clone https://github.com/BerkeArslankilic/hoffman-method.git
-cd hoffman-method
-```
-
-2. Install the required libraries:
+## How to run locally
+Install the requirements and run the app:
 ```bash
 pip install -r requirements.txt
-```
-
-3. Run the application:
-If you are on Windows, you can simply double-click the `StartApp.pyw` file to run it without a terminal window. 
-
-Alternatively, you can run it from the command line:
-```bash
 streamlit run app.py
 ```
+If you are on Windows, you can just run `StartApp.pyw` to open it without a terminal window.
 
-## License
-MIT License
+## What it does
+- Calculates the precedence matrix (with transitive closure)
+- Finds eligible tasks based on code numbers
+- Assigns tasks to stations depending on cycle time
+- Shows the step-by-step solution
+- Gives the final station assignments and efficiency metrics (can be downloaded as a CSV)
