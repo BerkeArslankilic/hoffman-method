@@ -4,7 +4,7 @@ A Python tool built with Streamlit to solve assembly line balancing problems usi
 
 ## Features
 
-🚀 **Live Demo:** [Play with the app here!](https://hoffman-method-8nkmvbajvdlkk3gwndfca9.streamlit.app/)
+**Live Demo:** [Try the application here](https://hoffman-method-8nkmvbajvdlkk3gwndfca9.streamlit.app/)
 
 - Takes task times, precedence constraints, and cycle time as inputs.
 - Automatically generates the precedence matrix (including transitive closures).
