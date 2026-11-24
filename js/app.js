@@ -242,19 +242,23 @@ function renderMatrix(solver) {
 function renderSteps(steps, tasks) {
     const box = $('steps');
     box.innerHTML = '';
+    let n = 0;
     steps.forEach(s => {
         if (s.action === 'new_station') {
-            box.appendChild(cell('div', `Station ${s.station - 1} closed → Station ${s.station} opened`, 'step-sep'));
+            box.appendChild(cell('div', `Station ${s.station} closed → Station ${s.station + 1} opened`, 'step-sep'));
             return;
         }
+        const forced = s.action === 'forced_assignment';
+        const st = forced ? s.station + 1 : s.station;
+        if (forced) box.appendChild(cell('div', `Station ${s.station} closed → Station ${st} opened`, 'step-sep'));
         const d = document.createElement('details');
         d.className = 'step';
         const sum = document.createElement('summary');
         sum.innerHTML = `<span class="s-no"></span><span class="s-st"></span><span class="s-sel"></span><span class="s-rem"></span>`;
-        sum.querySelector('.s-no').textContent = `Step ${String(s.step).padStart(2, '0')}`;
-        sum.querySelector('.s-st').textContent = `S${s.station}`;
-        sum.querySelector('.s-st').style.color = stationColor(s.station);
-        sum.querySelector('.s-sel').textContent = `assign ${s.selected}${s.action === 'forced_assignment' ? ' (forced, t > C)' : ''}`;
+        sum.querySelector('.s-no').textContent = `Step ${String(++n).padStart(2, '0')}`;
+        sum.querySelector('.s-st').textContent = `S${st}`;
+        sum.querySelector('.s-st').style.color = stationColor(st);
+        sum.querySelector('.s-sel').textContent = `assign ${s.selected}${forced ? ' (forced, t > C)' : ''}`;
         sum.querySelector('.s-rem').textContent = `${fmt(s.remainingBefore)} → ${fmt(s.remainingAfter)}`;
         d.appendChild(sum);
 

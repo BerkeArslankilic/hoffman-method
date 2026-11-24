@@ -18,7 +18,7 @@
     --c1: #D6131D;
     --c2: #E5E7EB;
     --c3: #6B7280;
-    --c4: #3F3F46;
+    --c4: #52525B;
 
     --display: 'Archivo', system-ui, -apple-system, sans-serif;
     --mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -80,6 +80,7 @@ main { flex: 1; }
 .workspace { display: grid; grid-template-columns: minmax(320px, 420px) 1fr; gap: 24px; padding: 32px 0 48px; align-items: start; }
 .workspace.single { grid-template-columns: 1fr; }
 .stack { display: flex; flex-direction: column; gap: 24px; }
+@media (min-width: 921px) { .sticky-inputs { position: sticky; top: 88px; } }
 .workspace > *, .stack > *, .row2 > *, .hero-result > * { min-width: 0; }
 @media (max-width: 920px) { .workspace, .po-workspace { grid-template-columns: minmax(0, 1fr); } }
 
@@ -125,7 +126,8 @@ main { flex: 1; }
 }
 .input .unit { border-left: 1px solid var(--line); }
 .input .pre { border-right: 1px solid var(--line); }
-input[type=number]::-webkit-inner-spin-button { opacity: .35; }
+input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=date]::-webkit-calendar-picker-indicator { filter: invert(.8); }
 
 select.select {
