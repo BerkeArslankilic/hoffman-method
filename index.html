@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoffman Method Generator · Berke Arslankılıç</title>
+    <meta name="description" content="Assembly line balancing with the Hoffman heuristic: precedence matrix, step-by-step assignment, station loads and line efficiency.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111114'/%3E%3Crect x='9' y='9' width='14' height='14' fill='%23D6131D'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hoffman.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="wrap">
+            <a href="https://berkearslankilic.github.io/" class="brand">← BERKE ARSLANKILIÇ</a>
+            <div class="top-actions">
+                <a href="https://github.com/BerkeArslankilic/hoffman-method" target="_blank" rel="noopener">Source ↗</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <section class="page-head">
+            <div class="head-row">
+                <div>
+                    <div class="eyebrow">Computer Integrated Manufacturing · Line Balancing</div>
+                    <h1>Hoffman Method Generator</h1>
+                    <p class="lede">Solves assembly line balancing problems with the Hoffman heuristic: builds the precedence matrix, assigns tasks station by station and reports line efficiency.</p>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <button class="btn btn-line" onclick="loadExample()">Load example</button>
+                    <button class="btn btn-line" onclick="clearAll()">Clear</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="workspace">
+            <!-- Girdiler -->
+            <div class="stack">
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">01</span>Tasks</span><button class="btn btn-line btn-sm" type="button" onclick="addTask()">+ Add task</button></div>
+                    <div class="panel-body">
+                        <div class="task-head"><span>Name</span><span>Time</span><span></span></div>
+                        <div id="task-list"></div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">02</span>Precedences</span><span class="aside">pred, succ</span></div>
+                    <div class="panel-body">
+                        <div class="field">
+                            <div class="input"><textarea id="prec" rows="7" spellcheck="false"></textarea></div>
+                            <span class="hint">One relationship per line, e.g. <code>A,B</code> means A must finish before B.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">03</span>Cycle Time</span></div>
+                    <div class="panel-body">
+                        <div class="field">
+                            <div class="input"><input type="number" id="cycle" min="0.1" step="0.5"><span class="unit">C</span></div>
+                        </div>
+                        <button class="btn btn-red btn-block" onclick="solve()">Solve</button>
+                        <div id="errors" class="errors"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sonuçlar -->
+            <div class="stack" id="results">
+                <div class="kpis">
+                    <div class="kpi accent"><div class="kpi-label">Stations</div><div class="kpi-value" id="m-stations">–</div><div class="kpi-sub" id="m-theo">Theoretical min –</div></div>
+                    <div class="kpi" id="k-eff"><div class="kpi-label">Line efficiency</div><div class="kpi-value" id="m-eff">–</div><div class="kpi-sub">Σt / (n · C)</div></div>
+                    <div class="kpi"><div class="kpi-label">Balance delay</div><div class="kpi-value" id="m-delay">–</div><div class="kpi-sub">100 − efficiency</div></div>
+                    <div class="kpi"><div class="kpi-label">Total idle</div><div class="kpi-value" id="m-idle">–</div><div class="kpi-sub" id="m-work">Work content –</div></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">04</span>Precedence Diagram</span><span class="aside">colored by station</span></div>
+                    <div class="panel-body"><div id="diagram" class="diagram"></div></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">05</span>Station Loads</span></div>
+                    <div class="panel-body"><div class="chart-box" style="height:280px"><canvas id="loadChart"></canvas></div></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">06</span>Station Assignments</span><button class="btn btn-line btn-sm" type="button" onclick="downloadCSV()">Download CSV</button></div>
+                    <div class="panel-body table-wrap"><table class="data" id="station-table"></table></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">07</span>Precedence Matrix</span><span class="aside">with transitive closure</span></div>
+                    <div class="panel-body table-wrap"><table class="data matrix" id="matrix"></table>
+                        <span class="hint">Code number = column sum. Tasks with code number 0 have no remaining predecessors and are eligible.</span>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span><span class="no">08</span>Step-by-Step Solution</span><button class="btn btn-line btn-sm" type="button" onclick="toggleSteps()">Expand all</button></div>
+                    <div class="panel-body" id="steps"></div>
+                    <div class="method">
+                        <div><h4>Selection rule</h4><code>code = 0 ∧ t ≤ remaining</code><p>First eligible task (in input order) that fits in the open station.</p></div>
+                        <div><h4>Line efficiency</h4><code>E = Σt / (n · C)</code><p>Share of available station time spent on work.</p></div>
+                        <div><h4>Theoretical minimum</h4><code>n_min = ⌈Σt / C⌉</code><p>Lower bound on the number of stations.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="foot">
+        <div class="wrap">
+            <span>© 2026 Berke Arslankılıç · Built for the CIM course</span>
+            <a href="https://github.com/BerkeArslankilic/hoffman-method" target="_blank" rel="noopener">View source on GitHub ↗</a>
+        </div>
+    </footer>
+
+    <script src="js/hoffman.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

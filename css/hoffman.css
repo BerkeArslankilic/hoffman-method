@@ -1,0 +1,55 @@
+/* Hoffman'a özel stiller (ortak temanın üstüne) */
+.task-head, .task-row { display: grid; grid-template-columns: 1fr 110px 34px; gap: 8px; align-items: center; }
+.task-head { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mute); }
+.task-row { margin-top: 8px; }
+.task-row .input input { padding: 8px 10px; font-size: 13px; }
+.task-row .btn-icon { height: 100%; }
+#task-list { max-height: 440px; overflow-y: auto; }
+
+.hint code { font-family: var(--mono); color: var(--ink); }
+
+.errors > div {
+    margin-top: 10px; padding: 10px 12px; border: 1.5px solid var(--bad); color: var(--bad);
+    font-size: 13px; background: rgba(255, 48, 72, 0.06);
+}
+#results.stale { opacity: .35; pointer-events: none; transition: opacity .2s; }
+
+/* Diyagram */
+.diagram { overflow-x: auto; padding: 4px 0; }
+.diagram svg { display: block; margin: 0 auto; max-width: none; }
+.diagram .d-name { font-family: var(--display); font-weight: 800; font-size: 16px; fill: #F3F4F6; }
+.diagram .d-time { font-family: var(--mono); font-size: 10px; fill: #9CA3AF; }
+
+/* Tablolar */
+.sw { display: inline-block; width: 9px; height: 9px; margin-right: 8px; vertical-align: 1px; }
+.matrix th, .matrix td { text-align: center !important; padding: 7px 10px; }
+.matrix td { color: var(--mute); }
+.matrix td.on { color: var(--ink-hi); background: rgba(214, 19, 29, 0.16); font-weight: 700; }
+.matrix tr th:first-child { color: var(--ink); text-align: left !important; }
+.matrix .code-row td, .matrix .code-row th { border-top: 1.5px solid var(--line-2); color: var(--red-hi); font-weight: 700; }
+
+/* Adımlar */
+#steps { display: flex; flex-direction: column; gap: 6px; }
+#steps > * + * { margin-top: 0; }
+.step { border: 1px solid var(--line); background: var(--bg); }
+.step summary {
+    list-style: none; cursor: pointer; display: grid; grid-template-columns: 80px 44px 1fr auto; gap: 12px; align-items: center;
+    padding: 10px 14px; font-family: var(--mono); font-size: 12.5px;
+}
+.step summary::-webkit-details-marker { display: none; }
+.step summary:hover { background: var(--raise); }
+.step[open] summary { border-bottom: 1px solid var(--line); }
+.s-no { color: var(--mute); }
+.s-st { font-weight: 700; }
+.s-sel { color: var(--ink-hi); }
+.s-rem { color: var(--ink-2); }
+.step .table-wrap { padding: 8px 14px 12px; }
+.step table.data td, .step table.data th { padding: 6px 10px; }
+.st-assigned { color: var(--ok); font-weight: 700; }
+.st-eligible { color: var(--warn); }
+.st-waiting { color: var(--mute); }
+.step-sep {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--red-hi);
+    padding: 8px 0; display: flex; align-items: center; gap: 12px;
+}
+.step-sep::before, .step-sep::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }

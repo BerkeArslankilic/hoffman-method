@@ -2,7 +2,7 @@
 
 This is a Python script I wrote for my Computer Integrated Manufacturing (CIM) class. It solves assembly line balancing problems using the Hoffman heuristic method and visualizes the process using Streamlit.
 
-**Live Demo:** [Link](https://hoffman-method-8nkmvbajvdlkk3gwndfca9.streamlit.app/)
+**Live Demo:** [Link](https://berkearslankilic.github.io/hoffman-method/)
 
 ## How to run locally
 Install the requirements and run the app:
